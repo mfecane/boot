@@ -24,11 +24,6 @@ rules.push({
 })
 
 rules.push({
-  test: /\.(jpe?g|png|gif|svg|glb)$/i,
-  type: 'asset/resource',
-})
-
-rules.push({
   test: /\.(scss|css)$/,
   exclude: /\.module\.scss$/i,
   use: [
@@ -109,6 +104,11 @@ rules.push({
       options: { sourceMap: true },
     },
   ],
+})
+
+rules.push({
+  test: /\.(jpe?g|png|gif|svg|glb)$/i,
+  type: 'asset/resource',
 })
 
 var plugins = []

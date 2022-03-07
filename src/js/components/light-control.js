@@ -14,14 +14,16 @@ const LightControl = () => {
 
   return (
     <div className={styles.container}>
-      <div>Position of the light</div>
-      <input
-        className={styles.slider}
-        type="range"
-        min="0"
-        max="500"
-        onChange={onSliderChange}
-      />
+      <i className={styles.light}></i>
+      <div className={styles.sliderContainer}>
+        <input
+          className={styles.slider}
+          type="range"
+          min="0"
+          max="500"
+          onChange={onSliderChange}
+        />
+      </div>
     </div>
   )
 }
