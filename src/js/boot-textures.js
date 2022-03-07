@@ -1,4 +1,5 @@
 import diffuseTextureSource from 'assets/boot-textures/boot_baseColor.png'
+import diffuseTextureSource2 from 'assets/boot-textures/boot_baseColor-2.png'
 import normalTextureSource from 'assets/boot-textures/boot_normal.png'
 import occlusionRoughnessMetallic from 'assets/boot-textures/boot_occlusionRoughnessMetallic.png'
 
@@ -44,7 +45,7 @@ export default [
   },
   {
     sources: {
-      diffuse: diffuseTextureSource,
+      diffuse: diffuseTextureSource2,
     },
     parts: [
       {

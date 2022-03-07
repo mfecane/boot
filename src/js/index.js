@@ -13,32 +13,6 @@ import 'json-circular-stringify'
 import texturesConfig from 'js/textures'
 import bootTextures from 'js/boot-textures'
 
-const bootConfiguration = {
-  objects: [
-    {
-      objectName: 'shaft_low',
-    },
-    {
-      objectName: 'tongue_low',
-    },
-    {
-      objectName: 'tip_low',
-    },
-    {
-      objectName: 'heel_low',
-    },
-    {
-      objectName: 'strap_low',
-    },
-    {
-      objectName: 'laces_low',
-    },
-    {
-      objectName: 'sole_low',
-    },
-  ],
-}
-
 const scene = new THREE.Scene()
 const objects = []
 
@@ -46,13 +20,7 @@ var sceneHelpers = {
   findMesh: (scene, id) => {
     return scene.children.find((el) => el.name === id)
   },
-
-  createDirectionalLight: (scene) => {},
 }
-
-const bootMaterial = new THREE.MeshStandardMaterial({
-  color: 0xffffff,
-})
 
 const setUpTextuesForObjects = (scene) => {
   texturesConfig.forEach((t) => {
@@ -108,43 +76,79 @@ const setUpBootMaterial = (scene) => {
   const roughnessTextureSource = bootTextures[0].sources.roughness
   const metalnessTextureSource = bootTextures[0].sources.metalness
   const aoTextureSource = bootTextures[0].sources.ao
-  // TODO ::: add AO
 
   const diffuseTexture = new THREE.TextureLoader().load(diffuseTextureSource)
-  bootMaterial.map = diffuseTexture
 
   const normalTexture = new THREE.TextureLoader().load(normalTextureSource)
-  bootMaterial.normalMap = normalTexture
 
   const roughnessTexture = new THREE.TextureLoader().load(
     roughnessTextureSource
   )
-  bootMaterial.roughnessMap = roughnessTexture
 
   const metalnessTexture = new THREE.TextureLoader().load(
     metalnessTextureSource
   )
-  bootMaterial.metalnessMap = metalnessTexture
-  bootMaterial.metalness = 1
 
   const aoTexture = new THREE.TextureLoader().load(aoTextureSource)
-  bootMaterial.aoMap = aoTexture
-  bootMaterial.aoMapIntensity = 0.5
 
   bootTextures[0].parts.forEach((el) => {
+    const bootPartMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      map: diffuseTexture,
+      normalMap: normalTexture,
+      roughnessMap: roughnessTexture,
+      metalnessMap: metalnessTexture,
+      metalness: 1,
+      aoMap: aoTexture,
+      aoMapIntensity: 0.5,
+    })
+
     const object = sceneHelpers.findMesh(scene, el.partName)
-    object.material = bootMaterial
+    object.material = bootPartMaterial
   })
 }
 
-// settings = {
-//   part: 'partname',
-//   value: 'value',
-// }
-
-const changeBootMaterial = (scene, settings) => {
+const changeBootMaterial = (scene, part, value) => {
   // TODO ::: implement
   // settings.
+  const bootTextureSet = bootTextures.find((el) => {
+    const partVal = el.parts.find((el2) => el2.partName === part)
+    return partVal.value === value
+  })
+
+  if (!bootTextureSet) {
+    return
+  }
+
+  const object = sceneHelpers.findMesh(scene, part)
+
+  if (bootTextureSet.sources.diffuse) {
+    const diffuseTexture = new THREE.TextureLoader().load(
+      bootTextureSet.sources.diffuse
+    )
+    object.material.map = diffuseTexture
+  }
+
+  if (bootTextureSet.sources.normal) {
+    const normalTexture = new THREE.TextureLoader().load(
+      bootTextureSet.sources.normal
+    )
+    object.material.normalMap = normalTexture
+  }
+
+  if (bootTextureSet.sources.roughness) {
+    const roughnessTexture = new THREE.TextureLoader().load(
+      bootTextureSet.sources.roughness
+    )
+    object.material.roughnessMap = roughnessTexture
+  }
+
+  if (bootTextureSet.sources.metalness) {
+    const metalnessTexture = new THREE.TextureLoader().load(
+      bootTextureSet.sources.metalness
+    )
+    object.material.metalnessMap = metalnessTexture
+  }
 }
 
 // let scene
@@ -318,7 +322,9 @@ new Promise((resolve, reject) => {
     )
     // scene.add(directionalLightShadowHelper)
     setUpBootMaterial(scene)
-    changeBootMaterial(scene)
+    changeBootMaterial(scene, 'shaft_low', '2')
+    changeBootMaterial(scene, 'tip_low', '2')
+    changeBootMaterial(scene, 'laces_low', '2')
     setUpTextuesForObjects(scene)
 
     // mesh.rotation.x = Math.PI / 2
