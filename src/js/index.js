@@ -13,9 +13,20 @@ import roughnessTextureSource from 'assets/boot_low_blinn_Roughness.png'
 import metalnessTextureSource from 'assets/boot_low_blinn_Metallic.png'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import 'json-circular-stringify'
 
-// const scene = new THREE.Scene();
-let scene
+const scene = new THREE.Scene()
+const objects = []
+
+var sceneHelpers = {
+  findMesh: (scene, id) => {
+    return scene.children.find((el) => el.name === id)
+  },
+
+  createDirectionalLight: (scene) => {},
+}
+
+// let scene
 const camera = new THREE.PerspectiveCamera(
   45,
   innerWidth / innerHeight,
@@ -41,7 +52,7 @@ loader.setDRACOLoader(draco)
 var t = 0
 
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.minDistance = 15
+controls.minDistance = 12
 controls.maxDistance = 20
 controls.target.set(0, 6, 0)
 controls.enablePan = false
@@ -53,8 +64,7 @@ let hdriTexture
 
 function animate() {
   requestAnimationFrame(animate)
-  // renderer.render(scene, camera)
-  renderer.render(glb.scene, camera)
+  renderer.render(scene, camera)
   controls.update()
 
   t += 0.01
@@ -79,19 +89,18 @@ new Promise((resolve, reject) => {
   )
 })
   .then((res) => {
+    console.log(`loaded scene with ${res.scene.children.length} objects`)
     glb = res
+    console.log(`loaded scene with ${glb.scene.children.length} objects`)
 
     return new Promise((resolve, reject) => {
-      new EXRLoader().load(
-        'assets/carpentry_shop_02_4k.exr',
-        (texture, textureData) => {
-          resolve(texture)
-        }
-      )
+      new EXRLoader().load('assets/background.exr', (texture, textureData) => {
+        resolve(texture)
+      })
     })
   })
   .then((res) => {
-    scene = glb.scene
+    // scene = glb.scene
 
     hdriTexture = res
 
@@ -128,44 +137,72 @@ new Promise((resolve, reject) => {
     //   metalnessMap: metalnessTexture,
     // })
 
-    const mesh = glb.scene.children[0]
+    console.log(`Scene loaded`)
+    while (glb.scene.children.length) {
+      var object = glb.scene.children[0]
+      console.log(`Loaded object name: ${object.name}`)
+      var nm = object.material.normalMap
+      console.log(nm)
+      debugger
+      // object.material.normalMap.flipY = true
+      scene.add(glb.scene.children[0])
+      objects.push(object)
+    }
+    const shaftObject = sceneHelpers.findMesh(scene, 'shaft_low')
+
+    const mesh = scene.children[0]
+
     // mesh.material = mat2
     // scene.add(mesh)
 
     const axesHelper = new THREE.AxesHelper(5)
     // scene.add(axesHelper)
 
-    const directionalLight = new THREE.DirectionalLight(0xffffdd, 1)
-    directionalLight.position.set(4, 4, 3)
-    directionalLight.target = mesh
+    const directionalLightTarget = new THREE.Object3D()
+    //scene.add(directionalLightTarget)
+
+    const directionalLight = new THREE.DirectionalLight(0xffffdd, 3)
+    directionalLight.position.set(-8, 12, 8)
+    // directionalLight.target = mesh
+    directionalLight.target = shaftObject
     directionalLight.castShadow = true
     const directionalLightHelper = new THREE.DirectionalLightHelper(
       directionalLight,
       2
     )
-    // scene.add(directionalLightHelper)
+    scene.add(directionalLightHelper)
     scene.add(directionalLight)
 
     directionalLight.shadow.mapSize.width = 1024 // default
     directionalLight.shadow.mapSize.height = 1024 // default
-    directionalLight.shadow.camera.near = 0.5 // default
-    directionalLight.shadow.camera.far = 10 // default
-    directionalLight.shadow.camera.top = 3
-    directionalLight.shadow.camera.right = 3
-    directionalLight.shadow.camera.bottom = -3
-    directionalLight.shadow.camera.left = -3
+    directionalLight.shadow.camera.near = 2 // default
+    directionalLight.shadow.camera.far = 25 // default
+    const shadowSize = 8
+    directionalLight.shadow.camera.top = shadowSize
+    directionalLight.shadow.camera.right = shadowSize
+    directionalLight.shadow.camera.bottom = -shadowSize
+    directionalLight.shadow.camera.left = -shadowSize
 
     // mesh.castShadow = true
     // mesh.receiveShadow = true
 
-    const directionalLight2 = new THREE.DirectionalLight(0xccccff, 0.3)
-    directionalLight2.position.set(-3, 0, -3)
-    directionalLight2.target = mesh
+    objects.forEach((object) => {
+      object.castShadow = true
+      object.receiveShadow = true
+    })
+
+    const directionalLight2Target = new THREE.Object3D()
+    scene.add(directionalLight2Target)
+
+    const directionalLight2 = new THREE.DirectionalLight(0xccccff, 0.5)
+    directionalLight2.position.set(8, 8, -8)
+    directionalLight2.target = directionalLight2Target
+    scene.add(directionalLight2.target)
     const directionalLighthelper2 = new THREE.DirectionalLightHelper(
       directionalLight2,
       5
     )
-    //scene.add(directionalLighthelper2)
+    // scene.add(directionalLighthelper2)
     scene.add(directionalLight2)
 
     // const planeGeometry = new THREE.PlaneGeometry(5, 5, 64, 64)
@@ -181,10 +218,10 @@ new Promise((resolve, reject) => {
     // camera.position.z = 3 * Math.cos(t)
 
     // camera.lookAt(0.0, 0.0, 0.0)
-    // const directionalLightShadowHelper = new THREE.CameraHelper(
-    //   directionalLight.shadow.camera
-    // )
-    //scene.add(directionalLightShadowHelper)
+    const directionalLightShadowHelper = new THREE.CameraHelper(
+      directionalLight.shadow.camera
+    )
+    // scene.add(directionalLightShadowHelper)
 
     // mesh.rotation.x = Math.PI / 2
     // mesh.position.y = 0

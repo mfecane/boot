@@ -36,6 +36,7 @@
     "imagemin-pngquant": "^9.0.2",
     "imagemin-svgo": "^9.0.0",
     "imagemin-webp": "^6.0.0",
+    "json-circular-stringify": "^1.0.1",
     "mini-css-extract-plugin": "^1.6.2",
     "node-sass": "^5.0.0",
     "postcss-loader": "^5.3.0",
