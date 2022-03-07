@@ -7,13 +7,37 @@ import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
-import normalTexture from 'assets/boot_low_blinn_Normal.png'
-import diffuseTextureSource from 'assets/boot_low_blinn_BaseColor.png'
-import roughnessTextureSource from 'assets/boot_low_blinn_Roughness.png'
-import metalnessTextureSource from 'assets/boot_low_blinn_Metallic.png'
-
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import 'json-circular-stringify'
+
+import texturesConfig from 'js/textures'
+import bootTextures from 'js/boot-textures'
+
+const bootConfiguration = {
+  objects: [
+    {
+      objectName: 'shaft_low',
+    },
+    {
+      objectName: 'tongue_low',
+    },
+    {
+      objectName: 'tip_low',
+    },
+    {
+      objectName: 'heel_low',
+    },
+    {
+      objectName: 'strap_low',
+    },
+    {
+      objectName: 'laces_low',
+    },
+    {
+      objectName: 'sole_low',
+    },
+  ],
+}
 
 const scene = new THREE.Scene()
 const objects = []
@@ -24,6 +48,103 @@ var sceneHelpers = {
   },
 
   createDirectionalLight: (scene) => {},
+}
+
+const bootMaterial = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+})
+
+const setUpTextuesForObjects = (scene) => {
+  texturesConfig.forEach((t) => {
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+    })
+
+    if (t.textures.diffuse) {
+      const diffuseTexture = new THREE.TextureLoader().load(t.textures.diffuse)
+      const diffuseMap = diffuseTexture
+      material.map = diffuseMap
+    }
+
+    if (t.textures.normal) {
+      const normalTexture = new THREE.TextureLoader().load(t.textures.normal)
+      const normalMap = normalTexture
+      material.normalMap = normalMap
+    }
+
+    if (t.textures.roughness) {
+      const roughnessTexture = new THREE.TextureLoader().load(
+        t.textures.roughness
+      )
+      const roughnessMap = roughnessTexture
+      material.roughnessMap = roughnessMap
+    }
+    if (t.textures.metalness) {
+      const metalnessTexture = new THREE.TextureLoader().load(
+        t.textures.metalness
+      )
+      const metalnessMap = metalnessTexture
+      material.metalness = 1
+      material.metalnessMap = metalnessMap
+    }
+
+    if (t.textures.ao) {
+      const aoTexture = new THREE.TextureLoader().load(t.textures.ao)
+      const aoMap = aoTexture
+      material.aoMapIntensity = 0.5
+      material.aoMap = aoMap
+    }
+
+    t.objects.forEach((o) => {
+      const object = sceneHelpers.findMesh(scene, o)
+      object.material = material
+    })
+  })
+}
+
+const setUpBootMaterial = (scene) => {
+  const diffuseTextureSource = bootTextures[0].sources.diffuse
+  const normalTextureSource = bootTextures[0].sources.normal
+  const roughnessTextureSource = bootTextures[0].sources.roughness
+  const metalnessTextureSource = bootTextures[0].sources.metalness
+  const aoTextureSource = bootTextures[0].sources.ao
+  // TODO ::: add AO
+
+  const diffuseTexture = new THREE.TextureLoader().load(diffuseTextureSource)
+  bootMaterial.map = diffuseTexture
+
+  const normalTexture = new THREE.TextureLoader().load(normalTextureSource)
+  bootMaterial.normalMap = normalTexture
+
+  const roughnessTexture = new THREE.TextureLoader().load(
+    roughnessTextureSource
+  )
+  bootMaterial.roughnessMap = roughnessTexture
+
+  const metalnessTexture = new THREE.TextureLoader().load(
+    metalnessTextureSource
+  )
+  bootMaterial.metalnessMap = metalnessTexture
+  bootMaterial.metalness = 1
+
+  const aoTexture = new THREE.TextureLoader().load(aoTextureSource)
+  bootMaterial.aoMap = aoTexture
+  bootMaterial.aoMapIntensity = 0.5
+
+  bootTextures[0].parts.forEach((el) => {
+    const object = sceneHelpers.findMesh(scene, el.partName)
+    object.material = bootMaterial
+  })
+}
+
+// settings = {
+//   part: 'partname',
+//   value: 'value',
+// }
+
+const changeBootMaterial = (scene, settings) => {
+  // TODO ::: implement
+  // settings.
 }
 
 // let scene
@@ -53,11 +174,11 @@ var t = 0
 
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.minDistance = 12
-controls.maxDistance = 20
+controls.maxDistance = 18
 controls.target.set(0, 6, 0)
 controls.enablePan = false
-controls.maxPolarAngle = (Math.PI * 1) / 2 - 0.1
-controls.minPolarAngle = (Math.PI * 2) / 7
+controls.maxPolarAngle = 0.55 * Math.PI
+controls.minPolarAngle = 0.35 * Math.PI
 
 let glb
 let hdriTexture
@@ -110,42 +231,15 @@ new Promise((resolve, reject) => {
     scene.background = hdriTexture
     // scene.environment = hdriTexture
 
-    // const texture = new THREE.TextureLoader().load(normalTexture)
-    // texture.flipY = false
-
-    // const diffuseTexture = new THREE.TextureLoader().load(diffuseTextureSource)
-    // diffuseTexture.flipY = false
-
-    // const roughnessTexture = new THREE.TextureLoader().load(
-    //   roughnessTextureSource
-    // )
-    // roughnessTexture.flipY = false
-
-    // const metalnessTexture = new THREE.TextureLoader().load(
-    //   metalnessTextureSource
-    // )
-    // metalnessTexture.flipY = false
-
-    // const aoTexture = new THREE.TextureLoader().load(aoTextureSource)
-    // aoTexture.flipY = false
-
-    // const mat2 = new THREE.MeshStandardMaterial({
-    //   color: 0xffffff,
-    //   map: diffuseTexture,
-    //   normalMap: texture,
-    //   roughnessMap: roughnessTexture,
-    //   metalnessMap: metalnessTexture,
-    // })
-
     console.log(`Scene loaded`)
     while (glb.scene.children.length) {
       var object = glb.scene.children[0]
       console.log(`Loaded object name: ${object.name}`)
-      var nm = object.material.normalMap
-      console.log(nm)
-      debugger
+      // var nm = object.material.normalMap
+      // console.log(nm)
       // object.material.normalMap.flipY = true
-      scene.add(glb.scene.children[0])
+      object.material.color = new THREE.Color(0xffffff)
+      scene.add(object)
       objects.push(object)
     }
     const shaftObject = sceneHelpers.findMesh(scene, 'shaft_low')
@@ -161,7 +255,7 @@ new Promise((resolve, reject) => {
     const directionalLightTarget = new THREE.Object3D()
     //scene.add(directionalLightTarget)
 
-    const directionalLight = new THREE.DirectionalLight(0xffffdd, 3)
+    const directionalLight = new THREE.DirectionalLight(0xffffdd, 1)
     directionalLight.position.set(-8, 12, 8)
     // directionalLight.target = mesh
     directionalLight.target = shaftObject
@@ -170,9 +264,10 @@ new Promise((resolve, reject) => {
       directionalLight,
       2
     )
-    scene.add(directionalLightHelper)
+    // scene.add(directionalLightHelper)
     scene.add(directionalLight)
 
+    directionalLight.shadow.radius = 4
     directionalLight.shadow.mapSize.width = 1024 // default
     directionalLight.shadow.mapSize.height = 1024 // default
     directionalLight.shadow.camera.near = 2 // default
@@ -194,7 +289,7 @@ new Promise((resolve, reject) => {
     const directionalLight2Target = new THREE.Object3D()
     scene.add(directionalLight2Target)
 
-    const directionalLight2 = new THREE.DirectionalLight(0xccccff, 0.5)
+    const directionalLight2 = new THREE.DirectionalLight(0xccccff, 0.3)
     directionalLight2.position.set(8, 8, -8)
     directionalLight2.target = directionalLight2Target
     scene.add(directionalLight2.target)
@@ -222,6 +317,9 @@ new Promise((resolve, reject) => {
       directionalLight.shadow.camera
     )
     // scene.add(directionalLightShadowHelper)
+    setUpBootMaterial(scene)
+    changeBootMaterial(scene)
+    setUpTextuesForObjects(scene)
 
     // mesh.rotation.x = Math.PI / 2
     // mesh.position.y = 0

@@ -1,7 +1,6 @@
 ## TODO:
 
-- fix background
-- fix light direction
+- remove materials from glb
 
 ## STUFF
 
