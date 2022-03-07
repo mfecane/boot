@@ -5,9 +5,16 @@ import 'css/global.scss'
 import 'css/styles.scss'
 
 import App from 'js/components/app'
-import Scene from 'js/components/scene'
+import { createScene, changeLightCallback } from 'js/components/scene'
+import SceneContext from 'js/scene-context'
 
-var scene = new Scene()
-const SceneContext = React.createContext(null)
+createScene()
+changeLightCallback(3)
+var sceneContextData = { changeLightCallback: changeLightCallback }
 
-ReactDOM.render(<App />, document.querySelector('#app'))
+ReactDOM.render(
+  <SceneContext.Provider value={sceneContextData}>
+    <App />
+  </SceneContext.Provider>,
+  document.querySelector('#app')
+)
