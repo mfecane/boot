@@ -1,0 +1,32 @@
+.container:not(:first-child) {
+  margin: 20px 0;
+}
+
+.header {
+  display: grid;
+  row-gap: 4px;
+  column-gap: 10px;
+  grid-template-columns: 80px 1fr;
+}
+
+.thumbnail {
+  background: #c04c4c;
+  width: 80px;
+  height: 40px;
+  grid-row: 1 /  span 2;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.title {
+  font-size: 20px;
+  color: #e9dfdf;
+  font-weight: 500;
+  text-transform:capitalize;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #6692c5;
+  font-weight: 400;
+}

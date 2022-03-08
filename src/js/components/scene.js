@@ -183,6 +183,8 @@ export function createScene() {
   controls.enablePan = false
   controls.maxPolarAngle = 0.55 * Math.PI
   controls.minPolarAngle = 0.35 * Math.PI
+  controls.enableDamping = true
+  controls.zoomSpeed = 0.2
 
   let glb
   let hdriTexture

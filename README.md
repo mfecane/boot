@@ -1,6 +1,8 @@
 ## TODO:
 
 - remove materials from glb
+- move camera to the right
+    try to use a fake camera ?
 
 ## STUFF
 

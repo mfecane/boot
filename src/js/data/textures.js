@@ -1,3 +1,5 @@
+// asset textures
+
 import ragDiffuseTextureSource from 'assets/textures/rag_blinn_Base_color.png'
 import ragNormalTextureSource from 'assets/textures/rag_blinn_Normal_OpenGL.png'
 import ragRoughnessTextureSource from 'assets/textures/rag_blinn_Roughness.png'
