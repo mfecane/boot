@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 
-import styles from 'js/components/boot-menu-item.module.scss'
+import styles from 'js/components/boot-menu/boot-menu-item.module.scss'
 import { parameterValues, partsConfig, getValueByid } from 'js/data/parameters'
 import sceneContext from 'js/scene-context'
 

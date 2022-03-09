@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
-import BootMenuItem from 'js/components/boot-menu-item'
+import React, { useState } from 'react'
+import BootMenuItem from 'js/components/boot-menu/boot-menu-item'
+import Controls from 'js/components/boot-menu/controls'
 
-import styles from 'js/components/boot-menu.module.scss'
+import styles from 'js/components/boot-menu/boot-menu.module.scss'
 import { getBootMenuItems } from 'js/data/parameters'
 
 const bootMenu = () => {
@@ -27,7 +28,12 @@ const bootMenu = () => {
     )
   })
 
-  return <div className={styles.container}>{elementsJSX}</div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.elementsContainer}>{elementsJSX}</div>
+      <Controls />
+    </div>
+  )
 }
 
 export default bootMenu

@@ -30,7 +30,7 @@
   background: #cccccc;
   width: 80px;
   height: 40px;
-  grid-row: 1 /  span 2;
+  grid-row: 1 / span 2;
   border-radius: 2px;
   align-self: center;
   transition: background 0.5ms ease-out;
@@ -40,14 +40,14 @@
   font-size: 20px;
   color: #e9dfdf;
   font-weight: 500;
-  text-transform:capitalize;
+  text-transform: capitalize;
 }
 
 .subtitle {
   font-size: 16px;
   color: #6692c5;
   font-weight: 400;
-  text-transform:capitalize;
+  text-transform: capitalize;
 }
 
 .valuesContainer {
@@ -66,4 +66,7 @@
 
 .smallThumbSelected {
   border: white 2px solid;
+}
+
+.elements-container {
 }

@@ -9,7 +9,7 @@ import {
   createScene,
   changeLightCallback,
   changeBootMaterialCallback,
-} from 'js/components/scene'
+} from 'js/components/scene/scene'
 import SceneContext from 'js/scene-context'
 import { setConfigItem, getConfigItem } from 'js/data/data-model'
 
