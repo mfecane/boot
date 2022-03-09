@@ -4,7 +4,7 @@
 - improve camera position
 - save boot config
 - try use dummy object instead of camera
-- add tooltip
+- scroll damping
 
 ## STUFF
 

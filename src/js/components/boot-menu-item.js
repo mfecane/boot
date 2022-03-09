@@ -4,6 +4,8 @@ import styles from 'js/components/boot-menu-item.module.scss'
 import { parameterValues, partsConfig, getValueByid } from 'js/data/parameters'
 import sceneContext from 'js/scene-context'
 
+import Tooltip from 'js/components/tooltip'
+
 const BootItemValue = (props) => {
   const { screenName, color, selected, setSelected, part, id } = props
   const { changeBootMaterialCallback } = useContext(sceneContext)
@@ -17,13 +19,18 @@ const BootItemValue = (props) => {
 
   return (
     <li>
-      <div
-        onClick={onClick}
-        className={`${styles.smallThumb} ${
-          selected ? styles.smallThumbSelected : ''
-        }`}
-        style={{ backgroundColor: color }}
-      ></div>
+      <Tooltip
+        content={screenName}
+        direction='bottom'
+      >
+        <div
+          onClick={onClick}
+          className={`${styles.smallThumb} ${
+            selected ? styles.smallThumbSelected : ''
+          }`}
+          style={{ backgroundColor: color }}
+        ></div>
+      </Tooltip>
     </li>
   )
 }

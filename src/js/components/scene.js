@@ -210,7 +210,7 @@ export function createScene() {
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.toneMapping = THREE.ReinhardToneMapping
-  renderer.toneMappingExposure = 2
+  renderer.toneMappingExposure = 3
   renderer.domElement.classList.add('mainCanvas')
   document.body.appendChild(renderer.domElement)
 
@@ -281,10 +281,7 @@ export function createScene() {
     )
   })
     .then((res) => {
-      console.log(`loaded scene with ${res.scene.children.length} objects`)
       glb = res
-      console.log(`loaded scene with ${glb.scene.children.length} objects`)
-
       return new Promise((resolve, reject) => {
         new EXRLoader().load(
           'assets/background.exr',
@@ -308,7 +305,6 @@ export function createScene() {
       console.log(`Scene loaded`)
       while (glb.scene.children.length) {
         var object = glb.scene.children[0]
-        console.log(`Loaded object name: ${object.name}`)
         // var nm = object.material.normalMap
         // console.log(nm)
         // object.material.normalMap.flipY = true
@@ -421,7 +417,7 @@ export function changeLightCallback(value) {
   const secondaryCameraRadius = 10
   const secondaryCameraOffset = Math.PI * 0.7
 
-  const t = value * 2 * Math.PI
+  const t = value * 2 * Math.PI + Math.PI / 2
 
   mainLight.position.x = mainCameraRadius * Math.sin(t)
   mainLight.position.y = mainCameraHeight
