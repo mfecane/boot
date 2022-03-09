@@ -1,53 +1,29 @@
-@import 'css/config.scss';
+@import "css/config.scss";
 
 body {
   color: $light;
 }
 
-.curtain {
-  background: black;
-  z-index: 5;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
 .btn {
-  width: 12rem;
-  padding: 4px 12px;
+  width: 160px;
+  padding: 10px 12px;
   background: transparent;
-  font-family: Montserrat, sans-serif;
-  font-size: 20px;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
   font-weight: 400;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-out;
   white-space: nowrap;
   letter-spacing: 1px;
+  border-radius: 2px;
+  font-weight: bold;
 }
 
 .btn_primary {
-  background: $accent;
-  color: $dark;
-  border: 2px solid $accent;
+  color: $light;
+  border: $light 2px solid;
 }
 
 .btn_primary:hover {
   color: white;
-  background: rgb(197, 91, 4);
-}
-
-.btn_secondary {
-  background: transparent;
-  color: $accent;
-  border: 2px solid $accent;
-}
-
-.btn_secondary:hover {
-  color: white;
-  background: rgba(255, 116, 2, 0.466);
-}
-
-.shadow {
-  box-shadow: 4px 4px 12px 1px rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
 }

@@ -2,13 +2,13 @@ import React from 'react'
 
 import styles from 'js/components/boot-menu/controls.module.scss'
 
-const controls = () => {
+const Controls = () => {
   return (
     <div class={styles.container}>
-      <button className={`btn`}>Save</button>
-      <button className={`btn`}>Reset</button>
+      <button className={`btn btn_primary`}>Save</button>
+      <button className={`btn btn_primary`}>Reset</button>
     </div>
   )
 }
 
-export default controls
+export default Controls

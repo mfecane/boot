@@ -8,4 +8,13 @@
   pointer-events: auto;
   border-radius: 2px;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  // TODO ::: fix this
+  // overflow-y: hidden;
+}
+
+.elementsContainer {
+  flex: 1 1 auto;
+  // overflow-y: auto;
 }

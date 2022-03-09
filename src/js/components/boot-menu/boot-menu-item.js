@@ -40,6 +40,13 @@ const BootMenuItem = (props) => {
   const values = parameterValues.find((el) => el.parts.includes(part)).values
   const value = getConfigItem(part)
 
+  // TODO ::: remove this hack
+  const [selected, setSelected] = useState(null);
+
+  useEffect(()=> {
+    setSelected(getConfigItem(part))
+  }, [])
+
   const valuesArray = Object.keys(values).map((key) => {
     return {
       id: key,
@@ -48,11 +55,13 @@ const BootMenuItem = (props) => {
   })
 
   const setSelectedItem = (part, value) => {
+    setSelected(value)
+    // and store in context
     setConfigItem(part, value)
   }
 
   const valuesJSX = valuesArray.map((el, index) => {
-    const isSelected = value === el.id
+    const isSelected = selected === el.id
 
     const setSelectedBound = setSelectedItem.bind(null, part, el.id)
 
