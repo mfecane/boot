@@ -222,6 +222,12 @@ export function createScene() {
   controls.enableDamping = true
   controls.zoomSpeed = 0.5
 
+  dummyCamera.position.set(
+    -8.914382135939384,
+    7.160033761736392,
+    0.433719732173791
+  )
+
   let glb
   let hdriTexture
 
@@ -235,6 +241,8 @@ export function createScene() {
       dummyCamera.position.y,
       dummyCamera.position.z
     )
+
+    console.log('offset', offset)
 
     // Shift camera off-center
     const delta = -2

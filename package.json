@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "webpack serve",
     "build": "webpack",
-    "deploy": "gh-pages -d dist",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "deploy": "gh-pages -d dist"
   },
   "author": "Mfecane",
   "license": "ISC",

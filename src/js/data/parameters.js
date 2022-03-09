@@ -185,3 +185,13 @@ export const getValueByid = (part, valueKey) => {
   const parameterValueItem = getParameterValueItem(part)
   return parameterValueItem.values[valueKey]
 }
+
+export const getDefaultConfig = () => {
+  const result = {}
+  parameterValues.forEach((el) => {
+    el.parts.forEach((p) => {
+      result[p] = Object.keys(el.values)[0]
+    })
+  })
+  return result
+}

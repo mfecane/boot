@@ -1,11 +1,8 @@
 ## TODO:
 
 - remove materials from glb
-- improve camera position
-- save boot config
-- try use dummy object instead of camera
+- reset boot config
 - scroll damping
-- add logo
 - start camera
 - add loading
 

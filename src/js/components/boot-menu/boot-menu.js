@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import BootMenuItem from 'js/components/boot-menu/boot-menu-item'
 import Controls from 'js/components/boot-menu/controls'
+import Report from 'js/components/boot-menu/report'
 
 import styles from 'js/components/boot-menu/boot-menu.module.scss'
 import { getBootMenuItems } from 'js/data/parameters'
 
-const bootMenu = () => {
+const bootMenu = ({ onReportShow }) => {
   const [active, setActive] = useState(false)
 
   const onMenuItemClick = (part) => {
@@ -31,7 +32,7 @@ const bootMenu = () => {
   return (
     <div className={styles.container}>
       <div className={styles.elementsContainer}>{elementsJSX}</div>
-      <Controls />
+      <Controls onReportShow={onReportShow} />
     </div>
   )
 }

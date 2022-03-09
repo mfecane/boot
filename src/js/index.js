@@ -11,7 +11,7 @@ import {
   changeBootMaterialCallback,
 } from 'js/components/scene/scene'
 import SceneContext from 'js/scene-context'
-import { setConfigItem, getConfigItem } from 'js/data/data-model'
+import { setConfigItem, getConfigItem, getConfig } from 'js/data/data-model'
 
 createScene()
 changeLightCallback(3)
@@ -21,6 +21,7 @@ var sceneContextData = {
   setConfigItem: setConfigItem,
   changeLightCallback: changeLightCallback,
   changeBootMaterialCallback: changeBootMaterialCallback,
+  getConfig: getConfig,
 }
 
 ReactDOM.render(

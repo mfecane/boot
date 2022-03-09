@@ -1,12 +1,6 @@
-const config = {
-  tip: 'brownLeather',
-  tongue: 'brownLeather',
-  heel: 'brownLeather',
-  strap: 'brownLeather',
-  shaft: 'brownLeather',
-  sole: 'tpu',
-  laces: 'dark',
-}
+import { getDefaultConfig } from 'js/data/parameters'
+
+let config = getDefaultConfig()
 
 export const setConfigItem = (id, value) => {
   if (!config[id]) {
@@ -22,4 +16,12 @@ export const getConfigItem = (id) => {
   }
 
   return config[id]
+}
+
+export const getConfig = () => {
+  return config
+}
+
+export const setConfig = (value) => {
+  config = value
 }
