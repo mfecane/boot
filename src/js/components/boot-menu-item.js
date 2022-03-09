@@ -8,8 +8,6 @@ const BootItemValue = (props) => {
   const { screenName, color, selected, setSelected, part, id } = props
   const { changeBootMaterialCallback } = useContext(sceneContext)
 
-  console.log('BootItemValue props', props)
-
   const onClick = () => {
     changeBootMaterialCallback(part, id)
     setSelected()

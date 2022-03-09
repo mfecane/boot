@@ -9,6 +9,7 @@
   grid-template-columns: 80px 1fr;
   position: relative;
   z-index: 3;
+  cursor: pointer;
 }
 
 .values {
@@ -60,6 +61,7 @@
   width: 32px;
   height: 32px;
   border-radius: 2px;
+  cursor: pointer;
 }
 
 .smallThumbSelected {

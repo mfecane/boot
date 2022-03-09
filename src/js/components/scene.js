@@ -14,18 +14,21 @@ import { partsConfig, parameterValues, textureSets } from 'js/data/parameters'
 let scene
 let mainLight
 let secondaryLight
+let camera
+let dummyCamera
+let renderer
 
 const findModelnameById = (id) => {
   const modelName = partsConfig[id]?.modelName
-  if(!modelName) {
-    throw new Error('Could not find model for part id '+ id)
+  if (!modelName) {
+    throw new Error('Could not find model for part id ' + id)
   }
   return modelName
 }
 
 const findMeshByModelName = (scene, modelName) => {
   const model = scene.children.find((el) => el.name === modelName)
-  if(!model){
+  if (!model) {
     throw new Error('Could not find model with id ' + id)
   }
   return model
@@ -34,6 +37,12 @@ const findMeshByModelName = (scene, modelName) => {
 const findMeshByID = (scene, id) => {
   const modelName = findModelnameById(id)
   return findMeshByModelName(scene, modelName)
+}
+
+const onWindowResize = () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 const setUpTextuesForObjects = (scene) => {
@@ -119,7 +128,6 @@ const setUpBootMaterial = (scene) => {
       aoMapIntensity: 0.5,
     })
 
-
     const object = findMeshByModelName(scene, el.partName)
     object.material = bootPartMaterial
   })
@@ -139,7 +147,7 @@ const changeBootMaterial = (scene, part, value) => {
     throw new Error('Could not find parameter value item for part ' + part)
   }
 
-  var parametersValue = paramaterValueItem.values[value];
+  var parametersValue = paramaterValueItem.values[value]
 
   if (!paramaterValueItem) {
     throw new Error('Could not find parameter value item for value ' + value)
@@ -147,23 +155,19 @@ const changeBootMaterial = (scene, part, value) => {
 
   var textureSet = textureSets[parametersValue.textureSet]
 
-  if(!textureSet) {
+  if (!textureSet) {
     throw new Error('Could not texture set for value ' + value)
   }
 
   const object = findMeshByID(scene, part)
 
   if (textureSet.diffuse) {
-    const diffuseTexture = new THREE.TextureLoader().load(
-      textureSet.diffuse
-    )
+    const diffuseTexture = new THREE.TextureLoader().load(textureSet.diffuse)
     object.material.map = diffuseTexture
   }
 
   if (textureSet.normal) {
-    const normalTexture = new THREE.TextureLoader().load(
-      textureSet.normal
-    )
+    const normalTexture = new THREE.TextureLoader().load(textureSet.normal)
     object.material.normalMap = normalTexture
   }
 
@@ -186,13 +190,21 @@ export function createScene() {
   scene = new THREE.Scene()
   const objects = []
 
-  const camera = new THREE.PerspectiveCamera(
+  camera = new THREE.PerspectiveCamera(
     45,
     innerWidth / innerHeight,
     0.1,
     2000
   )
-  const renderer = new THREE.WebGLRenderer({ antialias: true })
+
+  dummyCamera = new THREE.PerspectiveCamera(
+    45,
+    innerWidth / innerHeight,
+    0.1,
+    2000
+  )
+
+  renderer = new THREE.WebGLRenderer({ antialias: true })
 
   renderer.setSize(innerWidth, innerHeight)
   renderer.shadowMap.enabled = true
@@ -210,15 +222,15 @@ export function createScene() {
   loader.setDRACOLoader(draco)
   var t = 0
 
-  const controls = new OrbitControls(camera, renderer.domElement)
-  controls.minDistance = 12
-  controls.maxDistance = 18
+  const controls = new OrbitControls(dummyCamera, renderer.domElement)
+  controls.minDistance = 9
+  controls.maxDistance = 22
   controls.target.set(0, 6, 0)
   controls.enablePan = false
   controls.maxPolarAngle = 0.55 * Math.PI
   controls.minPolarAngle = 0.35 * Math.PI
   controls.enableDamping = true
-  controls.zoomSpeed = 0.2
+  controls.zoomSpeed = 0.5
 
   let glb
   let hdriTexture
@@ -228,6 +240,25 @@ export function createScene() {
     renderer.render(scene, camera)
     controls.update()
 
+    const offset = new THREE.Vector3(
+      dummyCamera.position.x,
+      dummyCamera.position.y,
+      dummyCamera.position.z
+    )
+
+    // Shift camera off-center
+    const delta = -2
+    const sqrt = Math.sqrt(offset.x * offset.x + offset.z * offset.z)
+    offset.x = offset.x - (delta * offset.z) / sqrt
+    offset.z = offset.z + (delta * offset.x) / sqrt
+
+    camera.position.set(offset.x, offset.y, offset.z)
+
+    camera.rotation.set(
+      dummyCamera.rotation.x,
+      dummyCamera.rotation.y,
+      dummyCamera.rotation.z
+    )
     t += 0.01
   }
 
@@ -372,6 +403,8 @@ export function createScene() {
       // mesh.rotation.x = Math.PI / 2
       // mesh.position.y = 0
       controls.update()
+
+      window.addEventListener('resize', onWindowResize)
 
       animate()
     })

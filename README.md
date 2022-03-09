@@ -1,8 +1,10 @@
 ## TODO:
 
 - remove materials from glb
-- move camera to the right
-    try to use a fake camera ?
+- improve camera position
+- save boot config
+- try use dummy object instead of camera
+- add tooltip
 
 ## STUFF
 

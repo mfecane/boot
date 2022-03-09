@@ -7,7 +7,6 @@ const LightControl = () => {
   const { changeLightCallback } = useContext(SceneContext)
 
   let onSliderChange = (e) => {
-    console.log(e.target.value)
     const value = e.target.value / 500
     changeLightCallback(value)
   }
