@@ -7,15 +7,33 @@
   row-gap: 4px;
   column-gap: 10px;
   grid-template-columns: 80px 1fr;
+  position: relative;
+  z-index: 3;
+}
+
+.values {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  transition: all 0.2s ease-out;
+  transform: translateY(-16px);
+}
+
+.valuesActive {
+  visibility: visible;
+  opacity: 1;
+  height: auto !important;
+  transform: translateY(0);
 }
 
 .thumbnail {
-  background: #c04c4c;
+  background: #cccccc;
   width: 80px;
   height: 40px;
   grid-row: 1 /  span 2;
   border-radius: 2px;
   align-self: center;
+  transition: background 0.5ms ease-out;
 }
 
 .title {
@@ -29,4 +47,22 @@
   font-size: 16px;
   color: #6692c5;
   font-weight: 400;
+  text-transform:capitalize;
+}
+
+.valuesContainer {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0 8px 0;
+}
+
+.smallThumb {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+}
+
+.smallThumbSelected {
+  border: white 2px solid;
 }
