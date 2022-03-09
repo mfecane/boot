@@ -15,14 +15,11 @@ const BootItemValue = (props) => {
     setSelected()
   }
 
-  // TODO ::: add thumbnail
+  // TODO ::: add image thumbnail
 
   return (
     <li>
-      <Tooltip
-        content={screenName}
-        direction='bottom'
-      >
+      <Tooltip content={screenName} direction="bottom">
         <div
           onClick={onClick}
           className={`${styles.smallThumb} ${
@@ -36,15 +33,12 @@ const BootItemValue = (props) => {
 }
 
 const BootMenuItem = (props) => {
+  const { getConfigItem, setConfigItem } = useContext(sceneContext)
   const { part, onMenuItemClick, isActive } = props
   const title = partsConfig[part]?.screenName
-  const [selected, setSelected] = useState(null)
 
   const values = parameterValues.find((el) => el.parts.includes(part)).values
-
-  useEffect(() => {
-    setSelected(Object.keys(values)[0])
-  }, [])
+  const value = getConfigItem(part)
 
   const valuesArray = Object.keys(values).map((key) => {
     return {
@@ -53,10 +47,14 @@ const BootMenuItem = (props) => {
     }
   })
 
-  const valuesJSX = valuesArray.map((el, index) => {
-    const isSelected = selected === el.id
+  const setSelectedItem = (part, value) => {
+    setConfigItem(part, value)
+  }
 
-    const setSelectedBound = setSelected.bind(null, el.id)
+  const valuesJSX = valuesArray.map((el, index) => {
+    const isSelected = value === el.id
+
+    const setSelectedBound = setSelectedItem.bind(null, part, el.id)
 
     return (
       <BootItemValue
@@ -70,8 +68,8 @@ const BootMenuItem = (props) => {
   })
 
   let selectedValue = null
-  if (selected) {
-    selectedValue = getValueByid(part, selected)
+  if (value) {
+    selectedValue = getValueByid(part, value)
   }
 
   return (

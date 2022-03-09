@@ -11,11 +11,14 @@ import {
   changeBootMaterialCallback,
 } from 'js/components/scene'
 import SceneContext from 'js/scene-context'
+import { setConfigItem, getConfigItem } from 'js/data/data-model'
 
 createScene()
 changeLightCallback(3)
 
 var sceneContextData = {
+  getConfigItem: getConfigItem,
+  setConfigItem: setConfigItem,
   changeLightCallback: changeLightCallback,
   changeBootMaterialCallback: changeBootMaterialCallback,
 }

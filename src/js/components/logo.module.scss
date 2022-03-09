@@ -1,0 +1,12 @@
+.logo {
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  background: white;
+  width: 400px;
+  height: 300px;
+  mask: url(assets/images/store-logo.svg);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
