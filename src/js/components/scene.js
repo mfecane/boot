@@ -7,9 +7,13 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import 'json-circular-stringify'
 
-import texturesConfig from 'js/data/textures'
-import bootTextures from 'js/data/boot-textures'
-import { partsConfig, parameterValues, textureSets } from 'js/data/parameters'
+import texturesConfig from 'js/data/props-textures'
+import {
+  partsConfig,
+  parameterValues,
+  textureSets,
+  defaultTextues,
+} from 'js/data/parameters'
 
 let scene
 let mainLight
@@ -40,9 +44,9 @@ const findMeshByID = (scene, id) => {
 }
 
 const onWindowResize = () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize( window.innerWidth, window.innerHeight );
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 const setUpTextuesForObjects = (scene) => {
@@ -95,40 +99,34 @@ const setUpTextuesForObjects = (scene) => {
 }
 
 const setUpBootMaterial = (scene) => {
-  const diffuseTextureSource = bootTextures[0].sources.diffuse
-  const normalTextureSource = bootTextures[0].sources.normal
-  const roughnessTextureSource = bootTextures[0].sources.roughness
-  const metalnessTextureSource = bootTextures[0].sources.metalness
-  const aoTextureSource = bootTextures[0].sources.ao
+  const diffuseTextureSource = defaultTextues.diffuse
+  const normalTextureSource = defaultTextues.normal
+  const occlusionRoughnessMetallicSource =
+    defaultTextues.occlusionRoughnessMetallic
 
-  // TODO ::: promisify
   const diffuseTexture = new THREE.TextureLoader().load(diffuseTextureSource)
 
   const normalTexture = new THREE.TextureLoader().load(normalTextureSource)
 
-  const roughnessTexture = new THREE.TextureLoader().load(
-    roughnessTextureSource
+  const occlusionRoughnessMetallicTexture = new THREE.TextureLoader().load(
+    occlusionRoughnessMetallicSource
   )
 
-  const metalnessTexture = new THREE.TextureLoader().load(
-    metalnessTextureSource
-  )
+  Object.keys(partsConfig).forEach((key) => {
+    var modelName = partsConfig[key].modelName
 
-  const aoTexture = new THREE.TextureLoader().load(aoTextureSource)
-
-  bootTextures[0].parts.forEach((el) => {
     const bootPartMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
       map: diffuseTexture,
       normalMap: normalTexture,
-      roughnessMap: roughnessTexture,
-      metalnessMap: metalnessTexture,
+      roughnessMap: occlusionRoughnessMetallicTexture,
+      metalnessMap: occlusionRoughnessMetallicTexture,
       metalness: 1,
-      aoMap: aoTexture,
+      aoMap: occlusionRoughnessMetallicTexture,
       aoMapIntensity: 0.5,
     })
 
-    const object = findMeshByModelName(scene, el.partName)
+    const object = findMeshByModelName(scene, modelName)
     object.material = bootPartMaterial
   })
 }
@@ -171,18 +169,15 @@ const changeBootMaterial = (scene, part, value) => {
     object.material.normalMap = normalTexture
   }
 
-  if (textureSet.roughness) {
-    const roughnessTexture = new THREE.TextureLoader().load(
-      textureSet.roughness
+  if (textureSet.occlusionRoughnessMetallic) {
+    const occlusionRoughnessMetallicTexture = new THREE.TextureLoader().load(
+      textureSet.occlusionRoughnessMetallic
     )
-    object.material.roughnessMap = roughnessTexture
-  }
-
-  if (textureSet.metalness) {
-    const metalnessTexture = new THREE.TextureLoader().load(
-      textureSet.metalness
-    )
-    object.material.metalnessMap = metalnessTexture
+    object.material.roughnessMap = occlusionRoughnessMetallicTexture
+    object.material.metalnessMap = occlusionRoughnessMetallicTexture
+    object.material.metalness = 1
+    object.material.aoMap = occlusionRoughnessMetallicTexture
+    object.material.aoMapIntensity = 0.5
   }
 }
 
@@ -190,12 +185,7 @@ export function createScene() {
   scene = new THREE.Scene()
   const objects = []
 
-  camera = new THREE.PerspectiveCamera(
-    45,
-    innerWidth / innerHeight,
-    0.1,
-    2000
-  )
+  camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 2000)
 
   dummyCamera = new THREE.PerspectiveCamera(
     45,
@@ -388,9 +378,6 @@ export function createScene() {
       )
       // scene.add(directionalLightShadowHelper)
       setUpBootMaterial(scene)
-      changeBootMaterial(scene, 'shaft', 'nubuck')
-      // changeBootMaterial(scene, 'tip_low', '2')
-      // changeBootMaterial(scene, 'laces_low', '2')
       setUpTextuesForObjects(scene)
 
       mainLight = directionalLight

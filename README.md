@@ -5,6 +5,9 @@
 - save boot config
 - try use dummy object instead of camera
 - scroll damping
+- add logo
+- start camera
+- add loading
 
 ## STUFF
 
