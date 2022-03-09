@@ -10,9 +10,13 @@ export const defaultTextues = {
 }
 
 export const partsConfig = {
-  shaft: { modelName: 'shaft_low', screenName: 'Shaft' },
+  tip: {modelName: 'tip_low', screenName: 'Tip' },
   tongue: { modelName: 'tongue_low', screenName: 'Tongue' },
+  heel: { modelName: 'heel_low', screenName: 'Heel' },
+  strap: { modelName: 'strap_low', screenName: 'Strap' },
+  shaft: { modelName: 'shaft_low', screenName: 'Shaft' },
   sole: { modelName: 'sole_low', screenName: 'Sole' },
+  laces: {modelName: 'laces_low', screenName: 'Laces' },
 }
 
 export const textureSets = {
@@ -22,11 +26,14 @@ export const textureSets = {
   set2: {
     diffuse: diffuseTextureSource2,
   },
+  set3: {
+    diffuse: diffuseTextureSource2,
+  },
 }
 
 export const parameterValues = [
   {
-    parts: ['shaft', 'tongue'],
+    parts: ['shaft', 'tongue', 'tip', 'strap', 'heel'],
     values: {
       nubuck: {
         screenName: 'nubuck',
@@ -48,6 +55,16 @@ export const parameterValues = [
         color: '#c04c4c',
         textureSet: 'set4',
       },
+      crocleather2: {
+        screenName: 'crocodile leather',
+        color: '#c04c4c',
+        textureSet: 'set4',
+      },
+      crocleather3: {
+        screenName: 'crocodile leather',
+        color: '#c04c4c',
+        textureSet: 'set4',
+      },
     },
   },
   {
@@ -60,6 +77,21 @@ export const parameterValues = [
       },
       white: {
         screenName: 'black crocodile leather',
+        color: '#4d4d4d',
+        textureSet: 'set2',
+      },
+    },
+  },
+  {
+    parts: ['laces'],
+    values: {
+      black: {
+        screenName: 'blue',
+        color: '#bbbbbb',
+        textureSet: 'set1',
+      },
+      white: {
+        screenName: 'yellow',
         color: '#4d4d4d',
         textureSet: 'set2',
       },

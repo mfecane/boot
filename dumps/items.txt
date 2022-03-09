@@ -1,0 +1,18 @@
+
+Loaded object name: shaft_low
+scene.js:279 Loaded object name: tongue_low
+scene.js:279 Loaded object name: tip_low
+scene.js:279 Loaded object name: heel_low
+scene.js:279 Loaded object name: strap_low
+scene.js:279 Loaded object name: laces_low
+scene.js:279 Loaded object name: sole_low
+scene.js:279 Loaded object name: klesch_bottom_low
+scene.js:279 Loaded object name: klesch_top_low
+scene.js:279 Loaded object name: hammer_handle_low
+scene.js:279 Loaded object name: hammer_head_low
+scene.js:279 Loaded object name: pin_lowlow
+scene.js:279 Loaded object name: rag2_low
+scene.js:279 Loaded object name: chain
+scene.js:279 Loaded object name: crate
+scene.js:279 Loaded object name: floor
+scene.js:279 Loaded object name: rag_low

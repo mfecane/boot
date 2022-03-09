@@ -9,13 +9,31 @@ import 'json-circular-stringify'
 
 import texturesConfig from 'js/data/textures'
 import bootTextures from 'js/data/boot-textures'
+import { partsConfig, parameterValues, textureSets } from 'js/data/parameters'
 
 let scene
 let mainLight
 let secondaryLight
 
-const findMeshByName = (scene, id) => {
-  return scene.children.find((el) => el.name === id)
+const findModelnameById = (id) => {
+  const modelName = partsConfig[id]?.modelName
+  if(!modelName) {
+    throw new Error('Could not find model for part id '+ id)
+  }
+  return modelName
+}
+
+const findMeshByModelName = (scene, modelName) => {
+  const model = scene.children.find((el) => el.name === modelName)
+  if(!model){
+    throw new Error('Could not find model with id ' + id)
+  }
+  return model
+}
+
+const findMeshByID = (scene, id) => {
+  const modelName = findModelnameById(id)
+  return findMeshByModelName(scene, modelName)
 }
 
 const setUpTextuesForObjects = (scene) => {
@@ -61,7 +79,7 @@ const setUpTextuesForObjects = (scene) => {
     }
 
     t.objects.forEach((o) => {
-      const object = findMeshByName(scene, o)
+      const object = findMeshByModelName(scene, o)
       object.material = material
     })
   })
@@ -74,6 +92,7 @@ const setUpBootMaterial = (scene) => {
   const metalnessTextureSource = bootTextures[0].sources.metalness
   const aoTextureSource = bootTextures[0].sources.ao
 
+  // TODO ::: promisify
   const diffuseTexture = new THREE.TextureLoader().load(diffuseTextureSource)
 
   const normalTexture = new THREE.TextureLoader().load(normalTextureSource)
@@ -100,49 +119,64 @@ const setUpBootMaterial = (scene) => {
       aoMapIntensity: 0.5,
     })
 
-    const object = findMeshByName(scene, el.partName)
+
+    const object = findMeshByModelName(scene, el.partName)
     object.material = bootPartMaterial
   })
 }
 
 const changeBootMaterial = (scene, part, value) => {
-  // TODO ::: implement
-  // settings.
-  const bootTextureSet = bootTextures.find((el) => {
-    const partVal = el.parts.find((el2) => el2.partName === part)
-    return partVal.value === value
+  // const bootTextureSet = bootTextures.find((el) => {
+  //   const partVal = el.parts.find((el2) => el2.partName === part)
+  //   return partVal.value === value
+  // })
+
+  const paramaterValueItem = parameterValues.find((pv) => {
+    return pv.parts.some((p) => p === part)
   })
 
-  if (!bootTextureSet) {
-    return
+  if (!paramaterValueItem) {
+    throw new Error('Could not find parameter value item for part ' + part)
   }
 
-  const object = findMeshByName(scene, part)
+  var parametersValue = paramaterValueItem.values[value];
 
-  if (bootTextureSet.sources.diffuse) {
+  if (!paramaterValueItem) {
+    throw new Error('Could not find parameter value item for value ' + value)
+  }
+
+  var textureSet = textureSets[parametersValue.textureSet]
+
+  if(!textureSet) {
+    throw new Error('Could not texture set for value ' + value)
+  }
+
+  const object = findMeshByID(scene, part)
+
+  if (textureSet.diffuse) {
     const diffuseTexture = new THREE.TextureLoader().load(
-      bootTextureSet.sources.diffuse
+      textureSet.diffuse
     )
     object.material.map = diffuseTexture
   }
 
-  if (bootTextureSet.sources.normal) {
+  if (textureSet.normal) {
     const normalTexture = new THREE.TextureLoader().load(
-      bootTextureSet.sources.normal
+      textureSet.normal
     )
     object.material.normalMap = normalTexture
   }
 
-  if (bootTextureSet.sources.roughness) {
+  if (textureSet.roughness) {
     const roughnessTexture = new THREE.TextureLoader().load(
-      bootTextureSet.sources.roughness
+      textureSet.roughness
     )
     object.material.roughnessMap = roughnessTexture
   }
 
-  if (bootTextureSet.sources.metalness) {
+  if (textureSet.metalness) {
     const metalnessTexture = new THREE.TextureLoader().load(
-      bootTextureSet.sources.metalness
+      textureSet.metalness
     )
     object.material.metalnessMap = metalnessTexture
   }
@@ -251,7 +285,7 @@ export function createScene() {
         scene.add(object)
         objects.push(object)
       }
-      const shaftObject = findMeshByName(scene, 'shaft_low')
+      const shaftObject = findMeshByID(scene, 'shaft')
 
       const mesh = scene.children[0]
 
@@ -327,9 +361,9 @@ export function createScene() {
       )
       // scene.add(directionalLightShadowHelper)
       setUpBootMaterial(scene)
-      changeBootMaterial(scene, 'shaft_low', '2')
-      changeBootMaterial(scene, 'tip_low', '2')
-      changeBootMaterial(scene, 'laces_low', '2')
+      changeBootMaterial(scene, 'shaft', 'nubuck')
+      // changeBootMaterial(scene, 'tip_low', '2')
+      // changeBootMaterial(scene, 'laces_low', '2')
       setUpTextuesForObjects(scene)
 
       mainLight = directionalLight
@@ -367,6 +401,6 @@ export function changeLightCallback(value) {
     secondaryCameraRadius * Math.cos(t + secondaryCameraOffset)
 }
 
-export function changeMaterialCallback(id, value) {
-  changeBootMaterial(scene, id, value)
+export const changeBootMaterialCallback = (part, value) => {
+  changeBootMaterial(scene, part, value)
 }

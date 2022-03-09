@@ -14,16 +14,15 @@
 .values {
   visibility: hidden;
   opacity: 0;
-  height: 0;
+  max-height: 0;
   transition: all 0.2s ease-out;
-  transform: translateY(-16px);
 }
 
 .valuesActive {
   visibility: visible;
   opacity: 1;
-  height: auto !important;
-  transform: translateY(0);
+  max-height: 300px;
+  transition: all 0.5s ease-out;
 }
 
 .thumbnail {

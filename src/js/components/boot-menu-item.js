@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import styles from 'js/components/boot-menu-item.module.scss'
 import { parameterValues, partsConfig, getValueByid } from 'js/data/parameters'
+import sceneContext from 'js/scene-context'
 
 const BootItemValue = (props) => {
-  const { screenName, color, selected, setSelected } = props
+  const { screenName, color, selected, setSelected, part, id } = props
+  const { changeBootMaterialCallback } = useContext(sceneContext)
+
   console.log('BootItemValue props', props)
+
+  const onClick = () => {
+    changeBootMaterialCallback(part, id)
+    setSelected()
+  }
+
+  // TODO ::: add thumbnail
+
   return (
     <li>
       <div
-        onClick={setSelected}
-        className={`${styles.smallThumb} ${selected ? styles.smallThumbSelected : ''}`}
+        onClick={onClick}
+        className={`${styles.smallThumb} ${
+          selected ? styles.smallThumbSelected : ''
+        }`}
         style={{ backgroundColor: color }}
       ></div>
     </li>
@@ -45,6 +58,7 @@ const BootMenuItem = (props) => {
         {...el}
         setSelected={setSelectedBound}
         selected={isSelected}
+        part={part}
         key={index}
       />
     )
@@ -56,12 +70,12 @@ const BootMenuItem = (props) => {
   }
 
   return (
-    <section
-      className={styles.container}
-      onClick={onMenuItemClick.bind(null, part)}
-    >
-      <div className={styles.header}>
-        <div className={styles.thumbnail} style={{ backgroundColor: selectedValue?.color }}></div>
+    <section className={styles.container}>
+      <div className={styles.header} onClick={onMenuItemClick.bind(null, part)}>
+        <div
+          className={styles.thumbnail}
+          style={{ backgroundColor: selectedValue?.color }}
+        ></div>
         <div className={styles.title}>{title}</div>
         <div className={styles.subtitle}>{selectedValue?.screenName}</div>
       </div>
