@@ -24,6 +24,12 @@ import chainNormalTextureSource from 'assets/textures/chain_Normal_OpenGL.png'
 import chainRoughnessTextureSource from 'assets/textures/chain_Roughness.png'
 import chainMetalnessTextureSource from 'assets/textures/chain_Metallic.png'
 
+import floorDiffuseTextureSource from 'assets/textures/floor_blinn_Base_color.png'
+import floorNormalTextureSource from 'assets/textures/floor_blinn_Normal_OpenGL.png'
+import floorRoughnessTextureSource from 'assets/textures/floor_blinn_Roughness.png'
+import floorMetalnessTextureSource from 'assets/textures/floor_blinn_Metallic.png'
+import floorAlphaTextureSource from 'assets/textures/alpha.png'
+
 const textures = [
   {
     objects: ['rag_low'],
@@ -75,6 +81,16 @@ const textures = [
       normal: chainNormalTextureSource,
       roughness: chainRoughnessTextureSource,
       metalness: chainMetalnessTextureSource,
+    },
+  },
+  {
+    objects: ['floor'],
+    textures: {
+      diffuse: floorDiffuseTextureSource,
+      normal: floorNormalTextureSource,
+      roughness: floorRoughnessTextureSource,
+      metalness: floorMetalnessTextureSource,
+      alpha: floorAlphaTextureSource,
     },
   },
 ]

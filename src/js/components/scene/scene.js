@@ -95,6 +95,18 @@ const setUpTextuesForObjects = (scene) => {
       const object = findMeshByModelName(scene, o)
       object.material = material
     })
+
+    if (t.textures.alpha) {
+      const alphaTexture = new THREE.TextureLoader().load(t.textures.alpha)
+      const alphaMap = alphaTexture
+      material.alphaMap = alphaMap
+      material.transparent = true
+    }
+
+    t.objects.forEach((o) => {
+      const object = findMeshByModelName(scene, o)
+      object.material = material
+    })
   })
 }
 
@@ -242,8 +254,6 @@ export function createScene() {
       dummyCamera.position.z
     )
 
-    console.log('offset', offset)
-
     // Shift camera off-center
     const delta = -2
     const sqrt = Math.sqrt(offset.x * offset.x + offset.z * offset.z)
@@ -306,7 +316,6 @@ export function createScene() {
         // var nm = object.material.normalMap
         // console.log(nm)
         // object.material.normalMap.flipY = true
-        object.material.color = new THREE.Color(0xffffff)
         scene.add(object)
         objects.push(object)
       }
