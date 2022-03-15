@@ -1,7 +1,6 @@
 'use strict'
 
-const { merge } = require('webpack-merge')
-const common = require('./webpack.common.js')
+const config = require('./webpack.config.js')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const optimization = {
@@ -20,7 +19,7 @@ const optimization = {
   ],
 }
 
-module.exports = merge(common, {
+module.exports = Object.assign(config, {
   mode: 'production',
   optimization: {
     minimize: true,

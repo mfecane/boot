@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-
-import sceneContext from 'js/scene-context'
+import React, { useContext } from 'react'
+import StateContext from 'js/state-context'
+import { parameterValues } from 'js/data/parameters'
 
 import styles from 'js/components/boot-menu/report.module.scss'
-
-import { parameterValues } from 'js/data/parameters'
 
 const ReportItem = ({ keyName, value }) => {
   let valueName
@@ -26,20 +24,15 @@ const ReportItem = ({ keyName, value }) => {
   )
 }
 
-const Report = ({ show, onReportClose }) => {
-  const { getConfig } = useContext(sceneContext)
-  const [value, setValue] = useState(false)
+const Report = () => {
+  const [{showReport, partsConfig}, dispatch] = useContext(StateContext)
 
-  useEffect(() => {
-    setValue(getConfig())
-  }, [show])
-
-  if (!show) {
+  if (!showReport) {
     return null
   }
 
-  const elmentsJSX = Object.keys(value).map((key) => {
-    return <ReportItem keyName={key} value={value[key]} key={key} />
+  const elmentsJSX = Object.keys(partsConfig).map((key) => {
+    return <ReportItem keyName={key} value={partsConfig[key]} key={key} />
   })
 
   return (
@@ -49,7 +42,7 @@ const Report = ({ show, onReportClose }) => {
         <h1 className={styles.header}>You have selected following items:</h1>
         {elmentsJSX}
         <button
-          onClick={onReportClose}
+          onClick={() => dispatch({ type: 'hideReport' })}
           className={`btn btn_primary ${styles.button}`}
         >
           close

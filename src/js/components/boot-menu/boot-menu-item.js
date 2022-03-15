@@ -1,19 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 
 import styles from 'js/components/boot-menu/boot-menu-item.module.scss'
-import { parameterValues, partsConfig, getValueByid } from 'js/data/parameters'
-import sceneContext from 'js/scene-context'
+import { parameterValues, partsConfig as realPartsConfig, getValueByid } from 'js/data/parameters'
+import StateContext from 'js/state-context'
 
 import Tooltip from 'js/components/tooltip'
 
-const BootItemValue = (props) => {
-  const { screenName, color, selected, setSelected, part, id } = props
-  const { changeBootMaterialCallback } = useContext(sceneContext)
-
-  const onClick = () => {
-    changeBootMaterialCallback(part, id)
-    setSelected()
-  }
+const BootItemValue = ({ screenName, color, part, id }) => {
+  const [{ partsConfig }, dispatch] = useContext(StateContext)
+  const selected = partsConfig[part] === id
 
   // TODO ::: add image thumbnail
 
@@ -21,7 +16,9 @@ const BootItemValue = (props) => {
     <li>
       <Tooltip content={screenName} direction="bottom">
         <div
-          onClick={onClick}
+          onClick={() => {
+            dispatch({ type: 'setMaterial', payload: id })
+          }}
           className={`${styles.smallThumb} ${
             selected ? styles.smallThumbSelected : ''
           }`}
@@ -32,20 +29,18 @@ const BootItemValue = (props) => {
   )
 }
 
-const BootMenuItem = (props) => {
-  const { getConfigItem, setConfigItem } = useContext(sceneContext)
-  const { part, onMenuItemClick, isActive } = props
-  const title = partsConfig[part]?.screenName
+const BootMenuItem = ({ part }) => {
+  const [{ partsConfig, selectedPart }, dispatch] = useContext(StateContext)
+  const title = realPartsConfig[part]?.screenName
+  const isActive = selectedPart === part
 
   const values = parameterValues.find((el) => el.parts.includes(part)).values
-  const value = getConfigItem(part)
+  const value = partsConfig[part]
 
-  // TODO ::: remove this hack
-  const [selected, setSelected] = useState(null);
-
-  useEffect(()=> {
-    setSelected(getConfigItem(part))
-  }, [])
+  let selectedValue = null
+  if (value) {
+    selectedValue = getValueByid(part, value)
+  }
 
   const valuesArray = Object.keys(values).map((key) => {
     return {
@@ -54,36 +49,18 @@ const BootMenuItem = (props) => {
     }
   })
 
-  const setSelectedItem = (part, value) => {
-    setSelected(value)
-    // and store in context
-    setConfigItem(part, value)
-  }
-
   const valuesJSX = valuesArray.map((el, index) => {
-    const isSelected = selected === el.id
-
-    const setSelectedBound = setSelectedItem.bind(null, part, el.id)
-
     return (
-      <BootItemValue
-        {...el}
-        setSelected={setSelectedBound}
-        selected={isSelected}
-        part={part}
-        key={index}
-      />
+      <BootItemValue {...el} part={part} key={index} />
     )
   })
 
-  let selectedValue = null
-  if (value) {
-    selectedValue = getValueByid(part, value)
-  }
-
   return (
     <section className={styles.container}>
-      <div className={styles.header} onClick={onMenuItemClick.bind(null, part)}>
+      <div
+        className={styles.header}
+        onClick={() => dispatch({ type: 'setSelectedPart', payload: part })}
+      >
         <div
           className={styles.thumbnail}
           style={{ backgroundColor: selectedValue?.color }}

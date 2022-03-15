@@ -1,20 +1,18 @@
-import React, { useContext, useEffect,useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 
 import styles from 'js/components/light-control.module.scss'
-import SceneContext from 'js/scene-context'
+import StateContext from 'js/state-context'
 
 const LightControl = () => {
-  const { changeLightCallback } = useContext(SceneContext)
-  const refInput = useRef(null);
+  const [{ lightPosition }, dispatch] = useContext(StateContext)
+  const refInput = useRef(null)
 
-  useEffect(()=>{
-    refInput.current.value = 200
-  }, [])
-
+  useEffect(() => {
+    refInput.current.value = lightPosition
+  })
 
   let onSliderChange = (e) => {
-    const value = e.target.value / 500
-    changeLightCallback(value)
+    dispatch({ type: 'setLightPosition', payload: e.target.value })
   }
 
   return (

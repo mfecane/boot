@@ -19,11 +19,9 @@ const Tooltip = (props) => {
   return (
     <div
       className={styles['Tooltip-Wrapper']}
-      // When to show the tooltip
       onMouseEnter={showTip}
       onMouseLeave={hideTip}
     >
-      {/* Wrapping */}
       {props.children}
       {active && (
         <div
@@ -31,7 +29,6 @@ const Tooltip = (props) => {
             styles[props.direction || 'top']
           }`}
         >
-          {/* Content */}
           {props.content}
         </div>
       )}

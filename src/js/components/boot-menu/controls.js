@@ -1,6 +1,4 @@
 import React from 'react'
-import { getDefaultConfig } from 'js/data/parameters'
-import { setConfig } from 'js/data/data-model'
 
 import styles from 'js/components/boot-menu/controls.module.scss'
 

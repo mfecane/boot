@@ -149,6 +149,9 @@ module.exports = {
       assets: path.resolve(__dirname, 'assets'),
     },
   },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'dist2'),
+  },
   devtool: 'source-map',
   plugins: plugins,
 }

@@ -1,28 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+
+import StateContext from 'js/state-context'
+import reducer, { initialState } from 'js/reducers/reducer'
+
+import { createScene, setSceneLoadedCallback } from 'js/scene/scene'
+
 import LightControl from 'js/components/light-control'
 import BootMenu from 'js/components/boot-menu/boot-menu'
 import Logo from 'js/components/logo'
 import Report from 'js/components/boot-menu/report'
+import Overlay from 'js/components/overlay'
 
-const app = () => {
-  const [showReport, setShowReport] = useState(false)
+import 'css/null.scss'
+import 'css/global.scss'
+import 'css/styles.scss'
 
-  const onReportShow = () => {
-    setShowReport(true)
-  }
+export default () => {
+  const [state, dispatch] = React.useReducer(reducer, initialState)
 
-  const onReportClose = () => {
-    setShowReport(false)
-  }
+  useEffect(function () {
+    createScene()
+
+    setSceneLoadedCallback(() => {
+      dispatch({
+        type: 'sceneLoaded',
+        payload: true,
+      })
+
+      dispatch({
+        type: 'setLightPosition',
+        payload: 200,
+      })
+    })
+  })
 
   return (
-    <React.Fragment>
+    <StateContext.Provider value={[state, dispatch]}>
+      <Overlay display={!state.sceneLoaded} />
       <Logo />
       <LightControl />
-      <BootMenu onReportShow={onReportShow} />
-      <Report show={showReport} onReportClose={onReportClose} />
-    </React.Fragment>
+      <BootMenu />
+      <Report />
+    </StateContext.Provider>
   )
 }
-
-export default app

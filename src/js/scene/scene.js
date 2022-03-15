@@ -21,8 +21,9 @@ let secondaryLight
 let camera
 let dummyCamera
 let renderer
+let loadedCallback = () => {}
 
-const findModelnameById = (id) => {
+const findModelnameById = function (id) {
   const modelName = partsConfig[id]?.modelName
   if (!modelName) {
     throw new Error('Could not find model for part id ' + id)
@@ -33,12 +34,12 @@ const findModelnameById = (id) => {
 const findMeshByModelName = (scene, modelName) => {
   const model = scene.children.find((el) => el.name === modelName)
   if (!model) {
-    throw new Error('Could not find model with id ' + id)
+    throw new Error('Could not find model with id ' + modelName)
   }
   return model
 }
 
-const findMeshByID = (scene, id) => {
+const findMeshByID = function (scene, id) {
   const modelName = findModelnameById(id)
   return findMeshByModelName(scene, modelName)
 }
@@ -131,7 +132,7 @@ const setUpBootMaterial = (scene) => {
   })
 }
 
-const changeBootMaterial = (scene, part, value) => {
+let changeBootMaterial = (scene, part, value) => {
   // const bootTextureSet = bootTextures.find((el) => {
   //   const partVal = el.parts.find((el2) => el2.partName === part)
   //   return partVal.value === value
@@ -183,6 +184,7 @@ const changeBootMaterial = (scene, part, value) => {
 
 export function createScene() {
   scene = new THREE.Scene()
+  console.log('scene created', scene)
   const objects = []
 
   camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 2000)
@@ -221,6 +223,12 @@ export function createScene() {
   controls.minPolarAngle = 0.35 * Math.PI
   controls.enableDamping = true
   controls.zoomSpeed = 0.5
+
+  dummyCamera.position.set(
+    -8.914382135939384,
+    7.160033761736392,
+    0.433719732173791
+  )
 
   let glb
   let hdriTexture
@@ -389,6 +397,7 @@ export function createScene() {
 
       window.addEventListener('resize', onWindowResize)
 
+      loadedCallback()
       animate()
     })
 }
@@ -417,6 +426,10 @@ export function changeLightCallback(value) {
     secondaryCameraRadius * Math.cos(t + secondaryCameraOffset)
 }
 
-export const changeBootMaterialCallback = (part, value) => {
+export const changeBootMaterialCallback = function (part, value) {
   changeBootMaterial(scene, part, value)
+}
+
+export const setSceneLoadedCallback = (fn) => {
+  loadedCallback = fn
 }
