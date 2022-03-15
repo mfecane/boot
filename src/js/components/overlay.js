@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import styles  from 'js/components/overlay.module.scss'
+import styles from 'js/components/overlay.module.scss'
 
 const overlay = ({ display }) => {
-  if (display) {
-    <div className={styles.overlay}>overlay</div>
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    if (!display) {
+      setTimeout(() => {
+        setHidden(true)
+      }, 3000)
+    }
+  }, [display])
+
+  if (hidden) {
+    return null
   }
-  return null;
+
+  return (
+    <div
+      className={`${styles.overlay} ${!display ? styles.transparent : ''}`}
+    ></div>
+  )
 }
 
 export default overlay
