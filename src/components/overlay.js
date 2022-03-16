@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import styles from 'js/components/overlay.module.scss'
+import styles from 'components/overlay.module.scss'
 
 const overlay = ({ display }) => {
   const [hidden, setHidden] = useState(false)

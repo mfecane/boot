@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 
-import styles from 'js/components/boot-menu/boot-menu-item.module.scss'
-import { parameterValues, partsConfig as realPartsConfig, getValueByid } from 'js/data/parameters'
-import StateContext from 'js/state-context'
+import styles from 'components/boot-menu/boot-menu-item.module.scss'
+import { parameterValues, partsConfig as realPartsConfig, getValueByid } from 'data/parameters'
+import StateContext from 'state-context'
 
-import Tooltip from 'js/components/tooltip'
+import Tooltip from 'components/tooltip'
 
 const BootItemValue = ({ screenName, color, part, id }) => {
   const [{ partsConfig }, dispatch] = useContext(StateContext)

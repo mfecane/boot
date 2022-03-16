@@ -1,5 +1,5 @@
-import { getDefaultConfig } from 'js/data/parameters'
-import { changeBootMaterialCallback, changeLightCallback } from 'js/scene/scene'
+import { getDefaultConfig } from 'data/parameters'
+import { changeBootMaterialCallback, changeLightCallback } from 'scene/scene'
 
 export const initialState = {
   sceneLoaded: false,

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import StateContext from 'js/state-context'
+import StateContext from 'state-context'
 
-import BootMenuItem from 'js/components/boot-menu/boot-menu-item'
-import Controls from 'js/components/boot-menu/controls'
+import BootMenuItem from 'components/boot-menu/boot-menu-item'
+import Controls from 'components/boot-menu/controls'
 
-import styles from 'js/components/boot-menu/boot-menu.module.scss'
+import styles from 'components/boot-menu/boot-menu.module.scss'
 
 const bootMenu = () => {
   const [{ partsConfig }, dispatch] = useContext(StateContext)

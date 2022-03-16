@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import StateContext from 'js/state-context'
-import { parameterValues } from 'js/data/parameters'
+import StateContext from 'state-context'
+import { parameterValues } from 'data/parameters'
 
-import styles from 'js/components/boot-menu/report.module.scss'
+import styles from 'components/boot-menu/report.module.scss'
 
 const ReportItem = ({ keyName, value }) => {
   let valueName

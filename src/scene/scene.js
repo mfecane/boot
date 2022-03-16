@@ -7,7 +7,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import 'json-circular-stringify'
 
-import texturesConfig from 'js/data/props-textures'
+import texturesConfig from 'data/props-textures'
 import {
   partsConfig,
   parameterValues,
