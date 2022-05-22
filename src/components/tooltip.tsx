@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
-import styles from 'js/components/tooltip.module.scss'
+import { useState } from 'react'
+import styles from 'components/tooltip.module.scss'
 
-const Tooltip = (props) => {
-  let timeout
+interface ITooltipProps {
+  direction: 'top' | 'bottom'
+  content: string
+  delay?: number
+}
+
+const Tooltip: React.FC<ITooltipProps> = (props) => {
+  let timeout: number
   const [active, setActive] = useState(false)
 
   const showTip = () => {

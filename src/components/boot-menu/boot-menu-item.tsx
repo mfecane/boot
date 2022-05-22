@@ -1,13 +1,34 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
-import styles from 'js/components/boot-menu/boot-menu-item.module.scss'
-import { parameterValues, partsConfig as realPartsConfig, getValueByid } from 'js/data/parameters'
-import StateContext from 'js/state-context'
+import { useStore } from 'src/hooks/use-store'
 
-import Tooltip from 'js/components/tooltip'
+import styles from 'components/boot-menu/boot-menu-item.module.scss'
+import {
+  parameterValues,
+  partsConfig as realPartsConfig,
+  getValueByid,
+  PartsKey,
+} from 'src/data/parameters'
 
-const BootItemValue = ({ screenName, color, part, id }) => {
-  const [{ partsConfig }, dispatch] = useContext(StateContext)
+import Tooltip from 'components/tooltip'
+
+interface IBootItemValue {
+  screenName: string
+  color: string
+  part: string
+  id: string
+}
+
+const BootItemValue: React.FC<IBootItemValue> = ({
+  screenName,
+  color,
+  part,
+  id,
+}) => {
+  const {
+    state: { partsConfig },
+    dispatch,
+  } = useStore()
   const selected = partsConfig[part] === id
 
   // TODO ::: add image thumbnail
@@ -29,8 +50,15 @@ const BootItemValue = ({ screenName, color, part, id }) => {
   )
 }
 
-const BootMenuItem = ({ part }) => {
-  const [{ partsConfig, selectedPart }, dispatch] = useContext(StateContext)
+interface IBootMenuItemProps {
+  part: PartsKey
+}
+
+const BootMenuItem: React.FC<IBootMenuItemProps> = ({ part }) => {
+  const {
+    state: { partsConfig, selectedPart },
+    dispatch,
+  } = useStore()
   const title = realPartsConfig[part]?.screenName
   const isActive = selectedPart === part
 
@@ -50,9 +78,7 @@ const BootMenuItem = ({ part }) => {
   })
 
   const valuesJSX = valuesArray.map((el, index) => {
-    return (
-      <BootItemValue {...el} part={part} key={index} />
-    )
+    return <BootItemValue {...el} part={part} key={index} />
   })
 
   return (

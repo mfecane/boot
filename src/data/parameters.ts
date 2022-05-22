@@ -32,6 +32,8 @@ export const partsConfig = {
   laces: { modelName: 'laces_low', screenName: 'Laces' },
 }
 
+export type PartsKey = keyof typeof partsConfig
+
 export const textureSets = {
   set1: {
     diffuse: diffuseTextureSource,
@@ -161,7 +163,7 @@ export const parameterValues = [
 ]
 
 export const getBootMenuItems = () => {
-  var result = []
+  var result: any[] = []
   parameterValues.forEach((parameterValue) => {
     parameterValue.parts.forEach((part) => {
       result.push(part)

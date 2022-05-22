@@ -1,8 +1,10 @@
-import React, { useContext } from 'react'
-import StateContext from 'js/state-context'
-import { parameterValues } from 'js/data/parameters'
+import React from 'react'
 
-import styles from 'js/components/boot-menu/report.module.scss'
+import { useStore } from 'src/hooks/use-store'
+
+import { parameterValues } from 'src/data/parameters'
+
+import styles from 'components/boot-menu/report.module.scss'
 
 const ReportItem = ({ keyName, value }) => {
   let valueName
@@ -25,7 +27,10 @@ const ReportItem = ({ keyName, value }) => {
 }
 
 const Report = () => {
-  const [{showReport, partsConfig}, dispatch] = useContext(StateContext)
+  const {
+    state: { showReport, partsConfig },
+    dispatch,
+  } = useStore()
 
   if (!showReport) {
     return null

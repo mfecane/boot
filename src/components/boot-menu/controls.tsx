@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from 'js/components/boot-menu/controls.module.scss'
+import styles from 'components/boot-menu/controls.module.scss'
 
 const Controls = ({ onReportShow }) => {
   return (

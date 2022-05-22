@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
@@ -7,23 +7,28 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import 'json-circular-stringify'
 
-import texturesConfig from 'js/data/props-textures'
+import bootScene from '/assets/scene.glb'
+import backgroundImage from '/assets/background.exr'
+
+import texturesConfig from 'src/data/props-textures'
 import {
   partsConfig,
   parameterValues,
   textureSets,
   defaultTextues,
-} from 'js/data/parameters'
+  PartsKey,
+} from 'src/data/parameters'
 
-let scene
-let mainLight
-let secondaryLight
-let camera
-let dummyCamera
-let renderer
+let scene: THREE.Scene
+let mainLight: THREE.DirectionalLight
+let secondaryLight: THREE.DirectionalLight
+let camera: THREE.PerspectiveCamera
+let dummyCamera: THREE.PerspectiveCamera
+let renderer: THREE.WebGLRenderer
+
 let loadedCallback = () => {}
 
-const findModelnameById = function (id) {
+const findModelnameById = function (id: PartsKey) {
   const modelName = partsConfig[id]?.modelName
   if (!modelName) {
     throw new Error('Could not find model for part id ' + id)
@@ -31,15 +36,15 @@ const findModelnameById = function (id) {
   return modelName
 }
 
-const findMeshByModelName = (scene, modelName) => {
-  const model = scene.children.find((el) => el.name === modelName)
+const findMeshByModelName = (scene: THREE.Scene, modelName: string) => {
+  const model = scene.children.find((el) => el.name === modelName) as THREE.Mesh
   if (!model) {
     throw new Error('Could not find model with id ' + modelName)
   }
   return model
 }
 
-const findMeshByID = function (scene, id) {
+const findMeshByID = function (scene: THREE.Scene, id: PartsKey) {
   const modelName = findModelnameById(id)
   return findMeshByModelName(scene, modelName)
 }
@@ -50,7 +55,7 @@ const onWindowResize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
-const setUpTextuesForObjects = (scene) => {
+const setUpTextuesForObjects = (scene: THREE.Scene) => {
   texturesConfig.forEach((t) => {
     const material = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -99,7 +104,7 @@ const setUpTextuesForObjects = (scene) => {
   })
 }
 
-const setUpBootMaterial = (scene) => {
+const setUpBootMaterial = (scene: THREE.Scene) => {
   const diffuseTextureSource = defaultTextues.diffuse
   const normalTextureSource = defaultTextues.normal
   const occlusionRoughnessMetallicSource =
@@ -113,7 +118,7 @@ const setUpBootMaterial = (scene) => {
     occlusionRoughnessMetallicSource
   )
 
-  Object.keys(partsConfig).forEach((key) => {
+  Object.keys(partsConfig).forEach((key: PartsKey) => {
     var modelName = partsConfig[key].modelName
 
     const bootPartMaterial = new THREE.MeshStandardMaterial({
@@ -132,7 +137,11 @@ const setUpBootMaterial = (scene) => {
   })
 }
 
-let changeBootMaterial = (scene, part, value) => {
+let changeBootMaterial = (
+  scene: THREE.Scene,
+  part: PartsKey,
+  value: string
+) => {
   // const bootTextureSet = bootTextures.find((el) => {
   //   const partVal = el.parts.find((el2) => el2.partName === part)
   //   return partVal.value === value
@@ -185,7 +194,7 @@ let changeBootMaterial = (scene, part, value) => {
 export function createScene() {
   scene = new THREE.Scene()
   console.log('scene created', scene)
-  const objects = []
+  const objects: THREE.Mesh[] = []
 
   camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 2000)
 
@@ -230,8 +239,8 @@ export function createScene() {
     0.433719732173791
   )
 
-  let glb
-  let hdriTexture
+  let glb: GLTF
+  let hdriTexture: THREE.DataTexture
 
   function animate() {
     requestAnimationFrame(animate)
@@ -260,10 +269,10 @@ export function createScene() {
     t += 0.01
   }
 
-  new Promise((resolve, reject) => {
+  new Promise<GLTF>((resolve, reject) => {
     loader.load(
       // resource URL
-      'assets/scene.glb',
+      bootScene,
       // called when the resource is loaded
       (glb) => {
         resolve(glb)
@@ -280,13 +289,10 @@ export function createScene() {
   })
     .then((res) => {
       glb = res
-      return new Promise((resolve, reject) => {
-        new EXRLoader().load(
-          'assets/background.exr',
-          (texture, textureData) => {
-            resolve(texture)
-          }
-        )
+      return new Promise<THREE.DataTexture>((resolve, reject) => {
+        new EXRLoader().load(backgroundImage, (texture, textureData) => {
+          resolve(texture)
+        })
       })
     })
     .then((res) => {
@@ -300,9 +306,8 @@ export function createScene() {
       scene.background = hdriTexture
       // scene.environment = hdriTexture
 
-      console.log(`Scene loaded`)
       while (glb.scene.children.length) {
-        var object = glb.scene.children[0]
+        var object = glb.scene.children[0] as THREE.Mesh
         // var nm = object.material.normalMap
         // console.log(nm)
         // object.material.normalMap.flipY = true
@@ -402,7 +407,7 @@ export function createScene() {
     })
 }
 
-export function changeLightCallback(value) {
+export function changeLightCallback(value: number) {
   if (!mainLight || !secondaryLight) {
     return
   }
@@ -426,10 +431,13 @@ export function changeLightCallback(value) {
     secondaryCameraRadius * Math.cos(t + secondaryCameraOffset)
 }
 
-export const changeBootMaterialCallback = function (part, value) {
+export const changeBootMaterialCallback = function (
+  part: PartsKey,
+  value: string
+) {
   changeBootMaterial(scene, part, value)
 }
 
-export const setSceneLoadedCallback = (fn) => {
+export const setSceneLoadedCallback = (fn: () => void) => {
   loadedCallback = fn
 }
