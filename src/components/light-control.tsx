@@ -1,10 +1,13 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import styles from 'js/components/light-control.module.scss'
-import StateContext from 'js/state-context'
+import styles from 'components/light-control.module.scss'
+import { useStore } from 'src/hooks/use-store'
 
 const LightControl = () => {
-  const [{ lightPosition }, dispatch] = useContext(StateContext)
+  const {
+    state: { lightPosition },
+    dispatch,
+  } = useStore()
   const refInput = useRef(null)
 
   useEffect(() => {
