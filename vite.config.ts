@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: 'boot',
+  base: '/boot/',
   resolve: {
     alias: {
       src: path.resolve(__dirname, 'src'),
@@ -15,6 +15,9 @@ export default defineConfig({
       assets: path.resolve(__dirname, 'assets'),
       css: path.resolve(__dirname, 'src/css'),
     },
+  },
+  server: {
+    port: 3030
   },
   assetsInclude: ['**/*.glb', '**/*.exr'],
 })

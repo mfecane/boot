@@ -1,19 +1,20 @@
-import React from 'react'
+import { useStore } from 'src/hooks/use-store'
 
 import styles from 'components/boot-menu/controls.module.scss'
 
-const Controls = ({ onReportShow }) => {
+const Controls = () => {
+  const {
+    state: { partsConfig },
+    dispatch,
+  } = useStore()
+
   return (
     <div className={styles.container}>
-      <button className={`btn btn_primary`} onClick={onReportShow}>
+      <button className={`btn btn_primary`} onClick={() => {
+          dispatch({ type: 'showReport' })
+        }}>
         Save
       </button>
-      {/* <button
-        className={`btn btn_primary`}
-        onClick={() => setConfig(getDefaultConfig())}
-      >
-        Reset
-      </button> */}
     </div>
   )
 }

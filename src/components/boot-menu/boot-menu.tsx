@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useStore } from 'src/hooks/use-store'
 
 import BootMenuItem from 'components/boot-menu/boot-menu-item'
@@ -11,7 +9,6 @@ import { PartsKey } from 'src/data/parameters'
 const bootMenu = () => {
   const {
     state: { partsConfig },
-    dispatch,
   } = useStore()
 
   const elementsJSX = Object.keys(partsConfig).map((part: PartsKey) => {
@@ -21,11 +18,7 @@ const bootMenu = () => {
   return (
     <div className={styles.container}>
       <div className={styles.elementsContainer}>{elementsJSX}</div>
-      <Controls
-        onReportShow={() => {
-          dispatch({ type: 'showReport' })
-        }}
-      />
+      <Controls/>
     </div>
   )
 }
