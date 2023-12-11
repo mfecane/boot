@@ -1,4 +1,4 @@
-import { Group } from 'three'
+import { Group, Object3D } from 'three'
 import { scene } from './scene'
 import { Mesh, Vector3 } from 'three'
 import { modelLoader } from './ModelLoader'
@@ -9,7 +9,7 @@ interface BootModel {}
 
 export class BootBuilder {
 	private readonly bootGroup: Group
-	private boot: Mesh | undefined
+	private boot: Group | undefined
 
 	public constructor() {
 		this.bootGroup = new Group()
@@ -28,6 +28,11 @@ export class BootBuilder {
 		this.boot.castShadow = true
 		this.boot.receiveShadow = true
 		this.bootGroup.add(this.boot)
+
+		console.groupCollapsed()
+		console.trace()
+		console.log('this.bootGroup', this.bootGroup)
+		console.groupEnd()
 	}
 
 	public async update(model: BootModel): Promise<void> {
@@ -41,7 +46,10 @@ export class BootBuilder {
 			'/assets/textures/new/boot_low_blinn_Metalness.png',
 			'/assets/textures/new/boot_low_blinn_Roughness.png'
 		).build()
-		this.boot.material = material
+		this.boot.traverse((child: Object3D) => {
+            const mesh = child as Mesh
+			mesh.material = material
+		})
 	}
 }
 

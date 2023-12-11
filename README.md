@@ -12,6 +12,9 @@
     - different facture
     - different color by key
 
+current texture -> blend color with mask
+
+
 ## STUFF
 
   npx sort-package-json

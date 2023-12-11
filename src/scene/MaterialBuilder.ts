@@ -1,9 +1,20 @@
-import { MeshPhysicalMaterial, MeshStandardMaterial, Texture, TextureLoader } from 'three'
+import {
+	MeshPhysicalMaterial,
+	MeshStandardMaterial,
+	Texture,
+	TextureLoader,
+} from 'three'
+import { TextureBuilder } from './TextureBuilder'
 
 export class MaterialBuilder {
 	private readonly loader: TextureLoader
 
-	public constructor(private readonly albedoUrl: string, private readonly normalUrl: string, private readonly metalnessUrl: string, private readonly roughnessUrl: string) {
+	public constructor(
+		private readonly albedoUrl: string,
+		private readonly normalUrl: string,
+		private readonly metalnessUrl: string,
+		private readonly roughnessUrl: string
+	) {
 		this.loader = new TextureLoader()
 	}
 
@@ -12,8 +23,9 @@ export class MaterialBuilder {
 			color: 0xffffff,
 		})
 
-		const diffuseTexture = await this.loadTexture(this.albedoUrl)
-		material.map = diffuseTexture
+		let diffuseTexture = await this.loadTexture(this.albedoUrl)
+		const tb = new TextureBuilder(diffuseTexture)
+		material.map = tb.blendTexture()
 
 		const normalTexture = await this.loadTexture(this.normalUrl)
 		material.normalMap = normalTexture
@@ -30,7 +42,7 @@ export class MaterialBuilder {
 	private loadTexture(url: string): Promise<Texture> {
 		return new Promise<Texture>((resolve) => {
 			this.loader.load(url, (texture: Texture) => {
-                texture.flipY = false
+				texture.flipY = false
 				resolve(texture),
 					() => {
 						throw 'Fail to load texture'

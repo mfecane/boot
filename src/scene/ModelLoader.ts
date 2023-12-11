@@ -1,6 +1,6 @@
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-import { Mesh } from 'three'
+import { Group } from 'three'
 
 export class ModelLoader {
 	private readonly loader: GLTFLoader
@@ -13,12 +13,12 @@ export class ModelLoader {
 		this.loader.setDRACOLoader(draco)
 	}
 
-	public async load(url: string): Promise<Mesh> {
+	public async load(url: string): Promise<Group> {
 		const gltf = await this.loadGLTF(url)
-		if (!gltf.scene.children.length) {
+		if (!gltf.scene) {
 			throw 'No data'
 		}
-		return gltf.scene.children[0] as unknown as Mesh
+		return gltf.scene as unknown as Group
 	}
 
 	private loadGLTF(url: string): Promise<GLTF> {

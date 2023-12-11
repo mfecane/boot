@@ -14,34 +14,36 @@ import 'css/global.scss'
 import 'css/styles.scss'
 
 export default () => {
-  const { state, dispatch } = useStore()
+	const { state, dispatch } = useStore()
 
-  useEffect(
-    function () {
-      createScene()
+	useEffect(function () {
+		createScene()
+	}, [])
 
-      setSceneLoadedCallback(() => {
-        dispatch({
-          type: 'sceneLoaded',
-          payload: true,
-        })
+	useEffect(
+		function () {
+			setSceneLoadedCallback(() => {
+				dispatch({
+					type: 'sceneLoaded',
+					payload: true,
+				})
 
-        dispatch({
-          type: 'setLightPosition',
-          payload: 200,
-        })
-      })
-    },
-    [state.sceneLoaded]
-  )
+				dispatch({
+					type: 'setLightPosition',
+					payload: 200,
+				})
+			})
+		},
+		[state.sceneLoaded]
+	)
 
-  return (
-    <>
-      <Overlay display={!state.sceneLoaded} />
-      <Logo />
-      <LightControl />
-      <BootMenu />
-      <Report />
-    </>
-  )
+	return (
+		<>
+			<Overlay display={!state.sceneLoaded} />
+			<Logo />
+			<LightControl />
+			<BootMenu />
+			<Report />
+		</>
+	)
 }

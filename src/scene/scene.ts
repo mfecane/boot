@@ -19,13 +19,13 @@ import {
 	PartsKey,
 } from 'src/data/parameters'
 import { renderBoot } from './renderBoot'
+import { renderer } from './Renderer'
 
 export let scene: THREE.Scene
 let mainLight: THREE.DirectionalLight
 let secondaryLight: THREE.DirectionalLight
 let camera: THREE.PerspectiveCamera
 let dummyCamera: THREE.PerspectiveCamera
-let renderer: THREE.WebGLRenderer
 
 let loadedCallback = () => {}
 
@@ -223,15 +223,7 @@ export function createScene() {
 		2000
 	)
 
-	renderer = new THREE.WebGLRenderer({ antialias: true })
-
-	renderer.setSize(innerWidth, innerHeight)
-	renderer.shadowMap.enabled = true
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap
-	renderer.toneMapping = THREE.ReinhardToneMapping
-	renderer.toneMappingExposure = 3
-	renderer.domElement.classList.add('mainCanvas')
-	document.body.appendChild(renderer.domElement)
+	document.body.appendChild(renderer.renderer.domElement)
 
 	const loader = new GLTFLoader()
 
@@ -241,7 +233,7 @@ export function createScene() {
 	loader.setDRACOLoader(draco)
 	var t = 0
 
-	const controls = new OrbitControls(dummyCamera, renderer.domElement)
+	const controls = new OrbitControls(dummyCamera, renderer.renderer.domElement)
 	controls.minDistance = 9
 	controls.maxDistance = 22
 	controls.target.set(0, 6, 0)
@@ -262,7 +254,7 @@ export function createScene() {
 
 	function animate() {
 		requestAnimationFrame(animate)
-		renderer.render(scene, camera)
+		renderer.renderScene(scene, camera)
 		controls.update()
 
 		const offset = new THREE.Vector3(
